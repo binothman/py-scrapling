@@ -23,8 +23,6 @@ ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV FLASK_APP=app/main.py
 
-RUN playwright install
-RUN playwright install-deps
 
 EXPOSE 8080
  
