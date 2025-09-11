@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def get_content(url):
     try:
-        page = Fetcher.get(url)
+        page = Fetcher.get(url, timeout=10)
         return page
     except Exception as e:
         return e
