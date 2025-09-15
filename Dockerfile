@@ -1,4 +1,4 @@
-FROM python:3.13-alpine AS builder
+FROM python:3.13.0 AS builder
  
 WORKDIR /app
  
@@ -7,14 +7,13 @@ ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
  
 COPY requirements.txt .
-RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN scrapling install
 # RUN python3 -m playwright install --with-deps chromium
 
 
 # Stage 2
-FROM python:3.13-alpine AS runner
+FROM python:3.13.0 AS runner
  
 WORKDIR /app
  
