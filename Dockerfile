@@ -8,8 +8,6 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
  
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip install "scrapling[fetchers]"
-RUN scrapling install
 # RUN python3 -m playwright install --with-deps chromium
 
 
@@ -24,6 +22,8 @@ COPY main.py main.py
 ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV FLASK_APP=app/main.py
+
+RUN scrapling install
 
 EXPOSE 8080
  
