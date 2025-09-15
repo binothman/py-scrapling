@@ -23,6 +23,9 @@ ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV FLASK_APP=app/main.py
 
+RUN pip install "scrapling[fetchers]"
+RUN scrapling install
+
 
 EXPOSE 8080
  
