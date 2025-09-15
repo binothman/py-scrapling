@@ -3,16 +3,6 @@ FROM python:3.13-alpine AS builder
 
 WORKDIR /app
 
-# تثبيت أدوات البناء الضرورية
-RUN apk add --no-cache \
-    build-base \
-    python3-dev \
-    libffi-dev \
-    openssl-dev \
-    bash \
-    git \
-    curl
-
 RUN python3 -m venv venv
 ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
