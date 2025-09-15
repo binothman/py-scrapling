@@ -20,14 +20,9 @@ def get_html():
             return str(page), 500
 
         content_type = page.headers.get("content-type", "text/plain")
-        charset = "utf-8"  # default
-        if "charset=" in content_type.lower():
-            charset = content_type.lower().split("charset=")[-1].split(";")[0].strip()
 
-        content_decoded = page._raw_body.encode(charset).decode(charset, errors='replace')
-        
         return Response(
-            response=content_decoded,      
+            response=page._raw_body,      
             status=page.status,         
             headers={"Content-Type": content_type}
         )
