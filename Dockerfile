@@ -1,4 +1,4 @@
-FROM python:3.13-alpine AS builder
+FROM python:3.13-slim AS builder
  
 WORKDIR /app
  
@@ -12,7 +12,7 @@ RUN pip install -r requirements.txt
 
 
 # Stage 2
-FROM python:3.13-alpine AS runner
+FROM python:3.13-slim AS runner
  
 WORKDIR /app
  
@@ -23,6 +23,7 @@ ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV FLASK_APP=app/main.py
 
+RUN pip install "scrapling[fetchers]"
 RUN scrapling install
 
 EXPOSE 8080
