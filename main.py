@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def get_content(url):
     try:
-        page = Fetcher.get('https://my-proxy.mbo-mohmal.workers.dev/fetch?url='+url, timeout=10)
+        page = Fetcher.get(url, timeout=10)
         return page
     except Exception as e:
         return e
