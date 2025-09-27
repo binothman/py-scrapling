@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import re
 from urllib.parse import urljoin, urlparse
 from scrapling.fetchers import DynamicFetcher
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -108,7 +109,7 @@ def get_article():
     except Exception as e:
         return str(e), 500
 
-@app.route('/links', methods=['GET', 'POST'])
+@app.route('/rss', methods=['GET', 'POST'])
 def get_links():
     try:
         page = get_content()
@@ -127,13 +128,32 @@ def get_links():
             title = a.get_text(separator=" ", strip=True)
             url = urljoin(base_url, a['href'])
             if len(title.split()) >= 5 and url not in seen_urls:  # keep only titles with 5+ words
-                links.append({"title": title, "url": url})
+                links.append({"title": title, "url": url, "pubDate": datetime.utcnow().isoformat() + 'Z'})
                 seen_urls.add(url)
 
+
+        rss = f"""<?xml version="1.0" encoding="UTF-8" ?>
+                        <rss version="2.0">
+                        <channel>
+                            <title>RSS Generator</title>
+                            <language>en-us</language>
+                """
+        
+        for item in links:
+            rss += f"""
+                <item>
+                    <title>{item['title']}</title>
+                    <link>{item['url']}</link>
+                    <pubDate>{item['pubDate']}</pubDate>
+                </item>
+            """
+            
+        rss += "</channel></rss>"
+
         return Response(
-            response=json.dumps(links, ensure_ascii=False),
+            response=rss,
             status=200,
-            headers={"Content-Type": 'application/json; charset=utf-8'}
+            headers={"Content-Type": 'application/rss+xml; charset=utf-8'}
         )
 
 
