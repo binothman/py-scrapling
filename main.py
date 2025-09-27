@@ -12,12 +12,12 @@ def get_content():
     try:
         url = request.args.get('url') or request.json.get('url')
         is_spa = request.args.get('is_spa') == '1' or (request.is_json and request.json.get('is_spa') == True)
-
+        
         page = None
         if is_spa:
             page = DynamicFetcher.fetch(url, network_idle=True, load_dom=True)
         else:
-            page = Fetcher.get(url, timeout=10)
+            page = Fetcher.get(url, timeout=10, retries=1)
 
         return page
     except Exception as e:
@@ -30,7 +30,7 @@ def get_html():
 
         if isinstance(page, Exception):
             return str(page), 500
-
+        
         content_type = page.headers.get("content-type", "text/plain")
 
         return Response(
@@ -38,6 +38,8 @@ def get_html():
             status=page.status,         
             headers={"Content-Type": content_type}
         )
+        
+        
 
     except Exception as e:
         return str(e), 500
