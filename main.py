@@ -3,7 +3,7 @@ from scrapling.fetchers import Fetcher
 from readability import Document
 from bs4 import BeautifulSoup
 import re
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, quote
 from scrapling.fetchers import DynamicFetcher
 from datetime import datetime
 
@@ -127,6 +127,7 @@ def get_links():
         for a in soup.find_all("a", href=True):
             title = a.get_text(separator=" ", strip=True)
             url = urljoin(base_url, a['href'])
+            url = quote(url, safe=':/')
             if len(title.split()) >= 5 and url not in seen_urls:  # keep only titles with 5+ words
                 links.append({"title": title, "url": url, "pubDate": datetime.utcnow().isoformat() + 'Z'})
                 seen_urls.add(url)
